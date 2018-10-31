@@ -1,76 +1,49 @@
 import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator,FlatList, ToastAndroid, StatusBar, AsyncStorage } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
+import {createStackNavigator} from 'react-navigation';
 
 import data from './data/country.json'
+
+//Custom Import
+import Main from './Main/Main';
+import Screen1 from './Main/Screen1';
+import Screen2 from './Main/Screen2'
+
+
 export default class App extends React.Component {
-  
+
+  static navigationOption ={
+    header:null,
+}
   constructor(props){
     super(props);
 
-    this.state = {
-      isLoading: true,
-      dataSource: [],
-    }
   }
   
   componentDidMount() {
-    return fetch("https://gist.githubusercontent.com/kaderhussain/59519a0be7deced0fbb3083fbb68c70d/raw/172186897f0e5f3c98ef32fd0246a7e369173603/country.json")
-    .then((response)=> response.json())
-    .then((responseJson)=>{
-      //setting the data 
-      this.setState({
-        isloading:false,
-        dataSource: responseJson.info
-      });
-      AsyncStorage.setItem('dataSource', responseJson.info)
-    })
-    .catch((error)=>{
-      ToastAndroid.show(error.toString() , ToastAndroid.SHORT)
-    })
-  }
   
+  }
 
   render() {
 
     //showing waiting screen when data is fetching
     
-    if(this.state.isloading){
-      return(
-        <View style={{flex:1, padding:20}}>
-        <Text> Data is Loading....</Text>
-        </View>
-      )
-    }else{
       return (
-      
-        <View style={{flex:1,paddingTop:40,paddingLeft:20}}>
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#00BCD4" translucent = {true}/>
-          <Text style={{fontSize:22}}>Data Table</Text>
-          
-          <FlatList 
-            data={this.state.dataSource}
-            renderItem={({item})=>{
-              return(
-                <View style={{flex:1, padding:10}}>
-                  <Text style={{flex:1, alignContent:'center',justifyContent:'center',borderColor:'#c8e1ff',borderBottomWidth:2,borderTopWidth:2,borderLeftWidth:2,borderRightWidth:2,fontSize:18, padding:20,backgroundColor:'#f1f8ff'}}>Country:{item.Country} </Text>
-                  <Text style={{flex:1, alignContent:'center',justifyContent:'center',borderColor:'#c8e1ff',borderBottomWidth:2,borderLeftWidth:2,borderRightWidth:2,fontSize:14,padding:20,backgroundColor:'#f1f8ff'}}>City:{item.City}</Text>
-                  {/* <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                  <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
-                  <Rows data={item.Country} textStyle={styles.text}/>
-                </Table> */}
-                </View>
-              )
-            }}
-            keyExtractor={(item, index) => index.toString()}
-            />
-        </View>
+          <AppStackNavigator />
       );
-    }
-
     
   }
 }
+
+
+//Stack navigator
+const AppStackNavigator = createStackNavigator({
+  Main:Main,
+  Screen1:Screen1,
+  Screen2: Screen2
+})
+
 
 const styles = StyleSheet.create({
   container: {
